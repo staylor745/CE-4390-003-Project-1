@@ -1,3 +1,5 @@
+package Backend;
+
 /**
  * Helper class to keep track of Name, connection status, time of creation, and duration of connection
  *
@@ -10,6 +12,7 @@ public class User {
 
     boolean isConnected;
     long connectionDuration;
+
 
 
     public User(String name, boolean isConnected, long connectionTime, long connectionDuration){
