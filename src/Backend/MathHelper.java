@@ -12,11 +12,11 @@ import javax.script.ScriptException;
 public class MathHelper {
 
     static ScriptEngineManager mgr = new ScriptEngineManager();
-    static ScriptEngine engine = mgr.getEngineByName("JavaScript");
+    static ScriptEngine engine = mgr.getEngineByName("Nashorn");
 
     public static String eval(String eq){
         try{
-            return (String) engine.eval(eq);
+            return "" + engine.eval(eq);
         }catch(ScriptException e){
             e.printStackTrace();
 

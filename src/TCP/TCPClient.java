@@ -14,24 +14,32 @@ class TCPClient {
         BufferedReader inFromUser =
                 new BufferedReader(new InputStreamReader(System.in));
 
+        // Create new connection to 127.0.0.1:6789
         Socket clientSocket = new Socket("127.0.0.1", 6789);
 
-        DataOutputStream outToServer =
-                new DataOutputStream(clientSocket.getOutputStream());
+        // Create writer to server
+        PrintWriter outToServer =
+                new PrintWriter(clientSocket.getOutputStream(),true);
 
+        // Create reader from server
         BufferedReader inFromServer =
                 new BufferedReader(new
                         InputStreamReader(clientSocket.getInputStream()));
 
-        sentence = inFromUser.readLine();
+        String userInput;
+        String serverInput;
 
-        outToServer.writeBytes(sentence + '\n');
-
-        modifiedSentence = inFromServer.readLine();
-
-        System.out.println("FROM SERVER: " + modifiedSentence);
-
-        clientSocket.close();
+        // Wait for user input
+        while((userInput = inFromUser.readLine()) != null){
+            // Send user input to server
+            outToServer.println(userInput);
+            // Wait for response from server
+            serverInput = inFromServer.readLine();
+            // Print out response from server
+            System.out.println(serverInput);
+            // If the server said goodbye, close program
+            if(serverInput.startsWith("GOODBYE")) break;
+        }
 
     }
 }
