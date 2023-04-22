@@ -74,7 +74,6 @@ class TCPServer {
                     }else if(message.startsWith("MATH ")){
                         // Get math request
                         String req = message.replaceFirst("MATH ","");
-                        // Evaluate math
                         String resp = MathHelper.eval(req);
                         // Report request and response
                         logger.info(name + " requested to calculate " + req + ". Sent " + resp);
