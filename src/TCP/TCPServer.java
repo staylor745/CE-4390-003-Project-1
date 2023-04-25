@@ -4,7 +4,9 @@ import Backend.MathHelper;
 
 import java.io.*;
 import java.net.*;
+import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 class TCPServer {
 
@@ -12,6 +14,16 @@ class TCPServer {
 
     public static void main(String argv[]) throws Exception
     {
+        FileHandler fh;
+        try {
+            fh = new FileHandler("./server_log.log");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+        } catch (SecurityException | IOException e) {
+            e.printStackTrace();
+        }
+
         // Create TCP Server socket on 6789
         ServerSocket welcomeSocket = new ServerSocket(6789);
 
