@@ -3,7 +3,7 @@ package TCP;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
-
+import java.util.UUID;
 
 class TCPClient {
 
@@ -16,7 +16,6 @@ class TCPClient {
         BufferedReader inFromUser =
                 new BufferedReader(new InputStreamReader(System.in));
 
-
         // Create new connection to 127.0.0.1:6789
         Socket clientSocket = new Socket("127.0.0.1", 6789);
 
@@ -28,62 +27,50 @@ class TCPClient {
         BufferedReader inFromServer =
                 new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+        // set name of client
+        UUID clientID = UUID.randomUUID();
+        outToServer.println("NAME client-" + clientID);
+        System.out.println(inFromServer.readLine());
 
+        String serverInput = "";  //Message received
+        // the client can send basic math calculation requests (at least 3) to the server at random times.
+        Random random = new Random();
+        int j = random.nextInt(8) + 3; // random number of 3 to 10 iterations
+        for (int i = 0; i< j; i++)
+        {
+            // sleep for random amount of time from 0-5 seconds
+            Thread.sleep(random.nextInt(5000));
 
-        String userInput;    //Message sent
-        String serverInput;  //Message received
-        Random random  = new Random();
-        int j = random.nextInt(50);
+            int a = random.nextInt(100);
+            int b = random.nextInt(100);
 
-        // Wait for user input
-        while((userInput = inFromUser.readLine()) != null){
-            // Send user input to server
-            outToServer.println(userInput);
-            // Wait for response from server
-            serverInput = inFromServer.readLine();
+            switch (random.nextInt(4))
+            {
+                case 0:
+                    outToServer.println("MATH " + a + "+" + b);
+                    break;
+                case 1:
+                    outToServer.println("MATH "+ a + "-" + b);
+                    serverInput = inFromServer.readLine();
+                    break;
+                case 2:
+                    outToServer.println("MATH " + a + "*" + b);
+                    serverInput = inFromServer.readLine();
+                    break;
+                case 3:
+                    outToServer.println("MATH " + a + "/" + b);
+                    serverInput = inFromServer.readLine();
+                    break;
 
-
-            // Print out response from server
+            }//end switch (random.nextInt(4))
+            //print out result
             System.out.println(serverInput);
 
-            // the client can send basic math calculation requests (at least 3) to the server at random times.
-            for (int i = 0; i< j+3; i++)
-            {
-                int a = random.nextInt(100);
-                int b = random.nextInt(100);
+        }//end for (int i = 0; i< j+3; i++)
 
-                switch (random.nextInt(4))
-                {
-                    case 0:
-                        outToServer.println("MATH " + a + "+" + b);
-                        break;
-                    case 1:
-                        outToServer.println("MATH "+ a + "-" + b);
-                        serverInput = inFromServer.readLine();
-                        break;
-                    case 2:
-                        outToServer.println("MATH " + a + "*" + b);
-                        serverInput = inFromServer.readLine();
-                        break;
-                    case 3:
-                        outToServer.println("MATH " + a + "/" + b);
-                        serverInput = inFromServer.readLine();
-                        break;
-
-                }//end switch (random.nextInt(4))
-                //print out result
-                System.out.println( inFromServer.readLine());
-
-            }//end for (int i = 0; i< j+3; i++)
-
-
-
-
-
-            // If the server said goodbye, close program
-            if(serverInput.startsWith("GOODBYE")) break;
-        }
-
+        // request to disconnect from server
+        outToServer.println("EXIT");
+        System.out.println(inFromServer.readLine());
     }
 }
 
