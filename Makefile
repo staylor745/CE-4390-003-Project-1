@@ -27,8 +27,10 @@ $(BINDIR)/%.class: $(SRCDIR)/%.java
 	$(JC) $(JFLAGS) $<
 
 # Run the TCPServer and two TCPClient instances
+# Sleep for 2 seconds after launching server to wait for server socket to be opened
 run:
 	java -cp $(BINDIR) TCP.TCPServer &
+	sleep 2
 	java -cp $(BINDIR) TCP.TCPClient &
 	java -cp $(BINDIR) TCP.TCPClient &
 
