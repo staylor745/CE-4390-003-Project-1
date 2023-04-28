@@ -3,10 +3,10 @@ JC = javac
 
 # Define the source and class directories
 SRCDIR = src
-BINDIR = out/production/CE-4390-003-Project-1
+BINDIR = bin
 
 # Define the list of Java source files to compile
-SOURCES := $(wildcard $(SRCDIR)/**/*.java)
+SOURCES := $(SRCDIR)/Backend/MathHelper.java $(SRCDIR)/TCP/TCPClient.java $(SRCDIR)/TCP/TCPServer.java
 
 # Define the class files to generate
 CLASSES := $(SOURCES:$(SRCDIR)/%.java=$(BINDIR)/%.class)
@@ -24,6 +24,7 @@ classes: $(CLASSES)
 $(CLASSES): $(SOURCES)
 
 $(BINDIR)/%.class: $(SRCDIR)/%.java
+	@mkdir -p $(@D)
 	$(JC) $(JFLAGS) $<
 
 # Run the TCPServer and two TCPClient instances
